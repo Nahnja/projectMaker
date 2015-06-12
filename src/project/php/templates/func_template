@@ -1,0 +1,7 @@
+public function {func_name}($params) {{
+{assign_vars}
+
+    $result = {pre_output};
+
+    return $result;
+}}

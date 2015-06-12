@@ -251,7 +251,7 @@ abstract class AbstractDBModel implements Model {
         }
         else {
             $condition = $param;
-        }
+        }{
 
         $records = static::$_db_connector->force_query("SELECT * FROM ".static::$_table_name." WHERE ".$condition.";");
 

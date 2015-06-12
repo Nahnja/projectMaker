@@ -5,3 +5,5 @@ PyYAML-3.11/*
 *.pyc
 
 My Project/*
+
+__pycache__

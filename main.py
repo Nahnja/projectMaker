@@ -5,6 +5,7 @@ import os.path
 from shell import shell
 import sys
 import yaml
+from src.projectMaker import make
 
 
 
@@ -46,40 +47,4 @@ config_file.close()
 
 config = yaml.load(config_raw)
 
-project_name = config["title"]
-language = config["language"] if "language" in config else "php"
-
-out_dir = out_dir + "/" + project_name
-
-# create folder structure
-shell_p("cp -R ./data/files '" + out_dir + "'")
-
-# get jQuery
-jquery_name = "jquery-" + config["jQuery"]
-config["jQuery_name"] = jquery_name
-
-if not os.path.exists("./data/jQuery/" + jquery_name + ".min.js"):
-    shell_p("curl -o ./data/jQuery/" + jquery_name + ".min.js 'http://code.jquery.com/" + jquery_name + ".min.js'")
-    shell_p("curl -o ./data/jQuery/" + jquery_name + ".js 'http://code.jquery.com/" + jquery_name + ".js'")
-
-shell_p("cp ./data/jQuery/" + jquery_name + ".min.js '" + out_dir + "/js_includes/'")
-shell_p("cp ./data/jQuery/" + jquery_name + ".js '" + out_dir + "/js_includes/'")
-
-
-module = importlib.import_module("data.languages." + language)
-data = module.create_code(config)
-
-# write code files
-for folder in data:
-    code_dict = data[folder]
-    if folder == "index":
-        folder = "."
-
-    for filename in code_dict:
-        code = code_dict[filename]
-
-        file = open(out_dir + "/" + folder + "/" + filename, "xt")
-        file.write(code)
-        file.close()
-
-    print("..." + folder + " done...")
+make(config)

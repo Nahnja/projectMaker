@@ -1,64 +1,70 @@
-title: My Project
+project:
+  title: My Project
+  path: "output"
 
-views:
-    - home
-    - events
-    - people
-    - about
+  php:
+    core: true
 
-jQuery: 1.11.3
+    views:
+        - home
+        - events
+        - people
+        - about
 
-# more to come
-language: php
-database_connector: mysqli
-
-# model name should be singular
-models:
-    user:
+    # model name should be singular
+    models:
+      user:
         # optional. if not given 's' will be appended to the model name
-        -   plural: users
-        -
-            name:           name
-            type:           string
-            visibility:     private
-        -
-            name:           first_name
-            type:           string
-            visibility:     protected
-        -
-            name:           age
-            type:           integer
-    event:
-        -
-            name:   name
-        -
-            name:   begin
-        -
-            name:   end
+        plural: users
+        fields:
+          -
+              name:           name
+              type:           string
+              visibility:     private
+          -
+              name:           first_name
+              type:           string
+              visibility:     protected
+          -
+              name:           age
+              type:           integer
+      event:
+        fields:
+          -
+              name:   name
+          -
+              name:   begin
+          -
+              name:   end
 
-database:
-    domain:     localhost
-    user:       root
-    password:   ""
-    name:       test
+    database:
+      domain:     localhost
+      user:       root
+      password:   ""
+      name:       test
+      database_connector: mysqli
 
-routes:
-    get:
+    routes:
+      get:
         get_route1:
-            first_name: string
-            last_name : string
-            percentage: float
-            age:        integer
-            valid:      boolean
-            numbers:    array
-            format:     json
+          first_name: string
+          last_name : string
+          percentage: float
+          age:        integer
+          valid:      boolean
+          numbers:    array
+          format:     json
         get_route2:
-            action: string
-    post:
+          action: string
+      post:
         post_route1:
-            key:    string
+          key:    string
         post_route2:
-            data:   string
+          data:   string
 
-controllers:
-    - TestController
+    controllers:
+        - TestController
+
+  javascript:
+    jQuery:
+      version: 1.11.3
