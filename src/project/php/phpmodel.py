@@ -7,7 +7,7 @@ class PHPModel():
         self.fields = fields
 
     def gen_code(self):
-        return self.template.format(context = self)
+        return self.template.format(context=self)
 
     @property
     def properties(self):

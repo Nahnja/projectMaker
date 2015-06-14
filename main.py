@@ -2,49 +2,54 @@
 
 import importlib
 import os.path
-from shell import shell
 import sys
 import yaml
+import collections
+
 from src.projectMaker import make
 
 
+def write(dict, path="."):
+    """given a tree build a directory structure according to that tree
+        assume leaves are files' contents
 
-argv = sys.argv
-argc = len(argv)
-
-# parse command line arguments
-if argc <= 1:
-    filename = "project.yml"
-else:
-    filename = argv[1]
-
-if argc <= 2:
-    out_dir = "."
-else:
-    out_dir = argv[2]
-
-
-
-
-def shell_p(command):
-    print(command)
-    return shell(command)
+        dict -> {
+            'root': {
+                'js': {'functions.js': 'function main() {alert("moooo")}'}
+            }
+        }
+    """
+    for key, val in dict.items():
+        if isinstance(val, str):
+            if not os.path.exists(path):
+                os.makedirs(path)
+            with open(path + "/" + key, "w") as out:
+                out.write(val)
+        elif isinstance(val, collections.Mapping):
+            write(val, path + "/" + key)
+        else:
+            raise ValueError("values must be mappings or string")
 
 
-# check for both .yaml and .yml version of filename (in case of typo)
-if not os.path.isfile(filename):
-    filename = filename.replace(".yml", ".yaml")
+if __name__ == "__main__":
+    argv = sys.argv
+    argc = len(argv)
 
+    if argc <= 1:
+        filename = "project.yml"
+    else:
+        filename = argv[1]
+
+    # check for both .yaml and .yml version of filename (in case of typo)
     if not os.path.isfile(filename):
-        print("No yaml file found (looked for '" + filename + "')! Exiting...")
-        sys.exit(1)
+        filename = filename.replace(".yml", ".yaml")
 
+        if not os.path.isfile(filename):
+            print("No yaml file found (looked for '" + filename + "')! Exiting...")
+            sys.exit(1)
 
+    with open(filename) as config_file:
+        config = yaml.load(config_file.read())
 
-config_file = open(filename, "r")
-config_raw = config_file.read()
-config_file.close()
-
-config = yaml.load(config_raw)
-
-make(config)
+    #magic
+    write(make(config))
